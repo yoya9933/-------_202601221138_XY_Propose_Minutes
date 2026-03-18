@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: http://localhost:5173/sitemap.xml
+Sitemap: https://sharegift.tw/sitemap.xml
 
 # 尊重 robots.txt，避免過度爬蟲
 User-agent: *

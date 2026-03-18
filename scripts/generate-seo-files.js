@@ -25,8 +25,9 @@ function loadProductionEnv() {
   return null
 }
 
-// 從環境變數或 .env.production 讀取域名
-const baseURL = process.env.VITE_SEO_URL || loadProductionEnv() || 'https://example.com'
+// 讀取域名：優先使用 .env.production，避免本地 .env 的 localhost 蓋掉生產域名
+const productionURL = loadProductionEnv()
+const baseURL = productionURL || process.env.VITE_SEO_URL || 'https://example.com'
 
 // 所有網站頁面
 const pages = [
