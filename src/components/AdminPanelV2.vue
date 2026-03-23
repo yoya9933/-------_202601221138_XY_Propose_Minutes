@@ -55,7 +55,6 @@ const {
   updateProduct, 
   deleteProduct, 
   toggleAvailability,
-  uploadImage,
   resetToDefault: resetProductsToDefault,
   exportAsJson: exportProductsAsJson,
   importFromJson: importProductsFromJson,
@@ -236,8 +235,6 @@ const productFormData = ref({
   description: '',
   available: true
 })
-const imagePreview = ref<string>('')
-const imageFileInput = ref<HTMLInputElement>()
 const productFileInput = ref<HTMLInputElement>()
 
 const resetProductForm = () => {
@@ -249,11 +246,8 @@ const resetProductForm = () => {
     description: '',
     available: true
   }
-  imagePreview.value = ''
   isEditingProduct.value = false
   editingProductId.value = null
-  uploadError.value = ''
-  isUploadingImage.value = false
 }
 
 const startEditProduct = (product: Product) => {
@@ -265,61 +259,9 @@ const startEditProduct = (product: Product) => {
     description: product.description || '',
     available: product.available
   }
-  imagePreview.value = product.image_url || ''
   editingProductId.value = product.id
   isEditingProduct.value = true
   isProductFormOpen.value = true
-}
-
-// 圖片上傳狀態
-const isUploadingImage = ref(false)
-const uploadError = ref('')
-
-const handleImageUpload = async (event: Event) => {
-  const target = event.target as HTMLInputElement
-  const file = target.files?.[0]
-  if (!file) return
-
-  // 驗證檔案類型
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
-  if (!allowedTypes.includes(file.type)) {
-    uploadError.value = '僅支援 JPG、PNG、GIF、WebP 格式'
-    return
-  }
-
-  // 驗證檔案大小 (最大 5MB)
-  const maxSize = 5 * 1024 * 1024
-  if (file.size > maxSize) {
-    uploadError.value = '圖片大小不能超過 5MB'
-    return
-  }
-
-  uploadError.value = ''
-  isUploadingImage.value = true
-
-  // 先建立預覽
-  const reader = new FileReader()
-  reader.onload = (e) => {
-    imagePreview.value = e.target?.result as string
-  }
-  reader.readAsDataURL(file)
-
-  try {
-    // 上傳圖片
-    const url = await uploadImage(file)
-    if (url) {
-      productFormData.value.image_url = url
-      console.log('✅ 圖片上傳成功:', url)
-    } else {
-      uploadError.value = '圖片上傳失敗，請稍後再試'
-      console.error('❌ 圖片上傳失敗：未取得 URL')
-    }
-  } catch (e) {
-    uploadError.value = '圖片上傳發生錯誤'
-    console.error('❌ 圖片上傳錯誤:', e)
-  } finally {
-    isUploadingImage.value = false
-  }
 }
 
 const handleProductSubmit = async () => {
@@ -1001,40 +943,6 @@ const isConfigured = computed(() => isSupabaseConfigured())
                   </div>
 
                   <div>
-                    <label class="text-sm font-medium text-slate-700">產品圖片</label>
-                    <div class="mt-2">
-                      <div v-if="imagePreview" class="mb-3 relative inline-block">
-                        <img :src="imagePreview" alt="預覽" class="w-32 h-32 object-cover rounded-xl border border-slate-200" />
-                        <div v-if="isUploadingImage" class="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center">
-                          <Loader2 class="w-6 h-6 text-white animate-spin" />
-                        </div>
-                      </div>
-                      <div class="flex items-center gap-2">
-                        <Button 
-                          variant="outline" 
-                          @click="imageFileInput?.click()" 
-                          class="gap-2 rounded-xl"
-                          :disabled="isUploadingImage"
-                        >
-                          <Loader2 v-if="isUploadingImage" class="w-4 h-4 animate-spin" />
-                          <ImageIcon v-else class="w-4 h-4" />
-                          {{ isUploadingImage ? '上傳中...' : (imagePreview ? '更換圖片' : '上傳圖片') }}
-                        </Button>
-                        <span v-if="productFormData.image_url && !isUploadingImage" class="text-xs text-emerald-600 flex items-center gap-1">
-                          <CheckCircle class="w-3 h-3" />
-                          已上傳
-                        </span>
-                      </div>
-                      <input ref="imageFileInput" type="file" accept="image/jpeg,image/png,image/gif,image/webp" class="hidden" @change="handleImageUpload" />
-                      <p v-if="uploadError" class="mt-2 text-sm text-red-500 flex items-center gap-1">
-                        <AlertCircle class="w-4 h-4" />
-                        {{ uploadError }}
-                      </p>
-                      <p class="mt-1 text-xs text-slate-500">支援 JPG、PNG、GIF、WebP，最大 5MB</p>
-                    </div>
-                  </div>
-
-                  <div>
                     <label class="text-sm font-medium text-slate-700">描述</label>
                     <Textarea v-model="productFormData.description" placeholder="產品描述..." rows="3" class="mt-1.5 rounded-xl" />
                   </div>
@@ -1103,42 +1011,41 @@ const isConfigured = computed(() => isSupabaseConfigured())
               <p class="text-sm text-slate-400 mt-1">點擊上方「新增產品」開始</p>
             </div>
 
-            <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div v-else class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
               <div
                 v-for="product in products"
                 :key="product.id"
-                class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all overflow-hidden group"
+                class="p-4 sm:p-5 border-b border-slate-100 last:border-b-0"
               >
-                <div v-if="product.image_url" class="aspect-square bg-slate-100 overflow-hidden">
-                  <img :src="product.image_url" :alt="product.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                </div>
-                <div v-else class="aspect-square bg-gradient-to-br from-slate-100 to-slate-50 flex items-center justify-center">
-                  <Package class="w-12 h-12 text-slate-300" />
-                </div>
-                
-                <div class="p-4">
-                  <div class="flex items-center justify-between mb-2">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-2 text-sm text-slate-500">
+                      <span>•</span>
+                      <span>{{ product.category }}</span>
+                    </div>
+                    <p class="mt-1 font-semibold text-slate-900">{{ product.name }}</p>
+                    <p class="mt-1 text-sm text-emerald-700 font-semibold">${{ product.price }}</p>
+                    <p v-if="product.description" class="mt-1 text-sm text-slate-600">{{ product.description }}</p>
+                  </div>
+
+                  <div class="flex items-center gap-2 shrink-0">
                     <Badge :class="[product.available ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500', 'rounded-lg text-xs']">
                       {{ product.available ? '上架中' : '已下架' }}
                     </Badge>
-                    <span class="font-bold text-emerald-600">${{ product.price }}</span>
-                  </div>
-                  <h4 class="font-semibold text-slate-900 line-clamp-1">{{ product.name }}</h4>
-                  <p class="text-sm text-slate-500 mt-0.5">{{ product.category }}</p>
-                  <p v-if="product.description" class="text-sm text-slate-600 mt-2 line-clamp-2">{{ product.description }}</p>
-                  
-                  <div v-if="isAuthenticated || !isConfigured" class="flex gap-2 mt-4 pt-4 border-t border-slate-100">
-                    <Button size="sm" variant="outline" @click="handleToggleAvailability(product.id)" class="flex-1 gap-1.5 rounded-lg">
-                      <Eye v-if="!product.available" class="w-4 h-4" />
-                      <EyeOff v-else class="w-4 h-4" />
-                      {{ product.available ? '下架' : '上架' }}
-                    </Button>
-                    <Button size="sm" variant="outline" @click="startEditProduct(product)" class="rounded-lg">
-                      <Edit2 class="w-4 h-4" />
-                    </Button>
-                    <Button size="sm" variant="outline" @click="handleProductDelete(product.id)" class="rounded-lg text-red-600 hover:text-red-700 hover:bg-red-50 hover:border-red-200">
-                      <Trash2 class="w-4 h-4" />
-                    </Button>
+
+                    <div v-if="isAuthenticated || !isConfigured" class="flex gap-2">
+                      <Button size="sm" variant="outline" @click="handleToggleAvailability(product.id)" class="gap-1.5 rounded-lg">
+                        <Eye v-if="!product.available" class="w-4 h-4" />
+                        <EyeOff v-else class="w-4 h-4" />
+                        {{ product.available ? '下架' : '上架' }}
+                      </Button>
+                      <Button size="sm" variant="outline" @click="startEditProduct(product)" class="rounded-lg">
+                        <Edit2 class="w-4 h-4" />
+                      </Button>
+                      <Button size="sm" variant="outline" @click="handleProductDelete(product.id)" class="rounded-lg text-red-600 hover:text-red-700 hover:bg-red-50 hover:border-red-200">
+                        <Trash2 class="w-4 h-4" />
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
