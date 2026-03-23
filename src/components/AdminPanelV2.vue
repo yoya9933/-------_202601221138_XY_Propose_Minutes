@@ -19,9 +19,10 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { useAuth } from '@/composables/useAuth'
 import { useSupabaseAnnouncementManager } from '@/composables/useSupabaseAnnouncementManager'
 import { useSupabaseProductManager } from '@/composables/useSupabaseProductManager'
+import { useSupabaseDeliveryPhotoManager } from '@/composables/useSupabaseDeliveryPhotoManager'
 import { isSupabaseConfigured } from '@/lib/supabase'
 import type { Announcement, Product } from '@/lib/database.types'
-import { deliveryPhotos as defaultDeliveryPhotos, type DeliveryPhoto } from '@/data/deliveryPhotos'
+import type { DeliveryPhoto } from '@/data/deliveryPhotos'
 
 // 認證
 const { 
@@ -62,6 +63,18 @@ const {
   fetchProducts
 } = useSupabaseProductManager()
 
+// 交貨照管理
+const {
+  deliveryPhotos,
+  loading: deliveryPhotoLoading,
+  error: deliveryPhotoError,
+  addDeliveryPhoto,
+  updateDeliveryPhoto,
+  deleteDeliveryPhoto,
+  fetchDeliveryPhotos,
+  stats: deliveryPhotoStats
+} = useSupabaseDeliveryPhotoManager()
+
 // 登入表單
 const loginEmail = ref('')
 const loginPassword = ref('')
@@ -87,6 +100,7 @@ const handleLogin = async () => {
   } else {
     await fetchAnnouncements()
     await fetchProducts()
+    await fetchDeliveryPhotos()
   }
 }
 
@@ -100,6 +114,7 @@ onMounted(async () => {
   await initialize()
   await fetchAnnouncements()
   await fetchProducts()
+  await fetchDeliveryPhotos()
 })
 
 // ===== 公告管理 =====
@@ -349,7 +364,6 @@ const handleProductReset = async () => {
 }
 
 // ===== 交貨照管理 =====
-const deliveryPhotos = ref<DeliveryPhoto[]>(defaultDeliveryPhotos)
 const isDeliveryPhotoFormOpen = ref(false)
 const isEditingDeliveryPhoto = ref(false)
 const editingDeliveryPhotoId = ref<string | null>(null)
@@ -370,7 +384,6 @@ const deliveryPhotoFormData = ref<{
   location: '',
   url: ''
 })
-const deliveryPhotoImagePreview = ref<string>('')
 
 const resetDeliveryPhotoForm = () => {
   deliveryPhotoFormData.value = {
@@ -380,7 +393,6 @@ const resetDeliveryPhotoForm = () => {
     location: '',
     url: ''
   }
-  deliveryPhotoImagePreview.value = ''
   isEditingDeliveryPhoto.value = false
   editingDeliveryPhotoId.value = null
 }
@@ -393,70 +405,57 @@ const startEditDeliveryPhoto = (photo: DeliveryPhoto) => {
     location: photo.location,
     url: photo.url
   }
-  deliveryPhotoImagePreview.value = photo.url
   editingDeliveryPhotoId.value = photo.id
   isEditingDeliveryPhoto.value = true
   isDeliveryPhotoFormOpen.value = true
 }
 
 const handleDeliveryPhotoSubmit = async () => {
-  if (!deliveryPhotoFormData.value.title || !deliveryPhotoFormData.value.url || !deliveryPhotoFormData.value.location) {
-    alert('請填寫標題、圖片和位置')
+  if (!deliveryPhotoFormData.value.title || !deliveryPhotoFormData.value.url || !deliveryPhotoFormData.value.location || !deliveryPhotoFormData.value.date) {
+    alert('請填寫標題、圖片 URL、位置和日期')
     return
   }
 
-  if (isEditingDeliveryPhoto.value && editingDeliveryPhotoId.value) {
-    // 編輯
-    const index = deliveryPhotos.value.findIndex(p => p.id === editingDeliveryPhotoId.value)
-    if (index !== -1) {
-      deliveryPhotos.value[index] = {
-        id: editingDeliveryPhotoId.value,
-        title: deliveryPhotoFormData.value.title,
-        description: deliveryPhotoFormData.value.description,
-        date: deliveryPhotoFormData.value.date,
-        location: deliveryPhotoFormData.value.location,
-        url: deliveryPhotoFormData.value.url
-      }
-    }
-  } else {
-    // 新增
-    const newPhoto: DeliveryPhoto = {
-      id: Date.now().toString(),
-      title: deliveryPhotoFormData.value.title,
-      description: deliveryPhotoFormData.value.description,
-      date: deliveryPhotoFormData.value.date,
-      location: deliveryPhotoFormData.value.location,
-      url: deliveryPhotoFormData.value.url
-    }
-    deliveryPhotos.value.push(newPhoto)
+  const photoData = {
+    title: deliveryPhotoFormData.value.title,
+    description: deliveryPhotoFormData.value.description,
+    date: deliveryPhotoFormData.value.date,
+    location: deliveryPhotoFormData.value.location,
+    url: deliveryPhotoFormData.value.url
   }
 
-  // 保存到本地儲存
-  localStorage.setItem('deliveryPhotos', JSON.stringify(deliveryPhotos.value))
-  alert(isEditingDeliveryPhoto.value ? '更新成功！' : '新增成功！')
+  if (isEditingDeliveryPhoto.value && editingDeliveryPhotoId.value) {
+    try {
+      await updateDeliveryPhoto(editingDeliveryPhotoId.value, photoData)
+      alert('更新成功！')
+    } catch {
+      alert('更新失敗，請稍後再試')
+      return
+    }
+  } else {
+    try {
+      await addDeliveryPhoto(photoData)
+      alert('新增成功！')
+    } catch {
+      alert('新增失敗，請稍後再試')
+      return
+    }
+  }
+
   isDeliveryPhotoFormOpen.value = false
   resetDeliveryPhotoForm()
 }
 
-const handleDeleteDeliveryPhoto = (id: string) => {
+const handleDeleteDeliveryPhoto = async (id: string) => {
   if (confirm('確定要刪除此交貨照嗎？')) {
-    deliveryPhotos.value = deliveryPhotos.value.filter(p => p.id !== id)
-    localStorage.setItem('deliveryPhotos', JSON.stringify(deliveryPhotos.value))
-    alert('刪除成功！')
-  }
-}
-
-// 初始化時從本地儲存讀取
-onMounted(() => {
-  const saved = localStorage.getItem('deliveryPhotos')
-  if (saved) {
     try {
-      deliveryPhotos.value = JSON.parse(saved)
-    } catch (e) {
-      console.error('讀取交貨照失敗', e)
+      await deleteDeliveryPhoto(id)
+      alert('刪除成功！')
+    } catch {
+      alert('刪除失敗，請稍後再試')
     }
   }
-})
+}
 
 // 工具函數
 const getTypeColor = (type: string) => {
@@ -1063,7 +1062,7 @@ const isConfigured = computed(() => isSupabaseConfigured())
                   <ImageIcon class="w-5 h-5 text-slate-600" />
                 </div>
               </div>
-              <p class="text-3xl font-bold text-slate-900">{{ deliveryPhotos.length }}</p>
+              <p class="text-3xl font-bold text-slate-900">{{ deliveryPhotoStats.total }}</p>
               <p class="text-sm text-slate-500 mt-1">總照片數</p>
             </div>
           </div>
@@ -1132,12 +1131,17 @@ const isConfigured = computed(() => isSupabaseConfigured())
 
                 <DialogFooter class="gap-2">
                   <Button variant="outline" @click="isDeliveryPhotoFormOpen = false" class="rounded-xl">取消</Button>
-                  <Button @click="handleDeliveryPhotoSubmit" class="rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600">
+                  <Button @click="handleDeliveryPhotoSubmit" :disabled="deliveryPhotoLoading" class="rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600">
+                    <Loader2 v-if="deliveryPhotoLoading" class="w-4 h-4 mr-2 animate-spin" />
                     {{ isEditingDeliveryPhoto ? '更新' : '新增' }}
                   </Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
+          </div>
+
+          <div v-if="deliveryPhotoError" class="p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
+            {{ deliveryPhotoError }}
           </div>
 
           <!-- 交貨照列表 -->
@@ -1147,7 +1151,12 @@ const isConfigured = computed(() => isSupabaseConfigured())
               <p class="text-sm text-slate-500 mt-1">共 {{ deliveryPhotos.length }} 張照片</p>
             </div>
             
-            <div v-if="deliveryPhotos.length === 0" class="p-12 text-center">
+            <div v-if="deliveryPhotoLoading" class="p-12 text-center">
+              <Loader2 class="w-8 h-8 animate-spin text-emerald-600 mx-auto mb-4" />
+              <p class="text-slate-500">載入中...</p>
+            </div>
+
+            <div v-else-if="deliveryPhotos.length === 0" class="p-12 text-center">
               <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <ImageIcon class="w-8 h-8 text-slate-400" />
               </div>
