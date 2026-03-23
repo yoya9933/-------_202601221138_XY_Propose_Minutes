@@ -205,15 +205,15 @@ const getTypeLabel = (type: string) => {
             新增公告
           </Button>
         </DialogTrigger>
-        <DialogContent class="sm:max-w-[600px]">
-          <DialogHeader>
+        <DialogContent class="sm:max-w-[900px] max-h-[90vh] flex flex-col">
+          <DialogHeader class="shrink-0">
             <DialogTitle>{{ isEditing ? '編輯公告' : '新增公告' }}</DialogTitle>
             <DialogDescription>
               {{ isEditing ? '修改現有公告的內容' : '建立新的公告，將即時顯示在首頁' }}
             </DialogDescription>
           </DialogHeader>
 
-          <div class="space-y-4">
+          <div class="space-y-4 overflow-y-auto flex-1 px-0 pr-4">
             <div>
               <label class="text-sm font-medium">標題 *</label>
               <Input v-model="formData.title" placeholder="例：春節服務公告" />
@@ -240,12 +240,13 @@ const getTypeLabel = (type: string) => {
             </div>
 
             <div>
-              <label class="text-sm font-medium">內容 *</label>
-              <Textarea v-model="formData.content" placeholder="詳細的公告內容..." rows="6" />
+              <label class="text-sm font-medium">內容 * (無字數限制)</label>
+              <Textarea v-model="formData.content" placeholder="詳細的公告內容..." rows="12" class="resize-vertical" />
+              <p class="text-xs text-gray-500 mt-1">已輸入 {{ formData.content.length }} 個字</p>
             </div>
           </div>
 
-          <DialogFooter class="gap-2">
+          <DialogFooter class="shrink-0 gap-2 mt-6 border-t pt-4">
             <Button variant="outline" @click="isFormOpen = false">取消</Button>
             <Button @click="handleSubmit">{{ isEditing ? '更新' : '新增' }}</Button>
           </DialogFooter>
