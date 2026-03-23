@@ -7,7 +7,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { useAnnouncementManager } from '@/composables/useAnnouncementManager'
 import { useProductManager } from '@/composables/useProductManager'
-import { useDeliveryPhotoManager } from '@/composables/useDeliveryPhotoManager'
 import { useGitHubSync } from '@/composables/useGitHubSync'
 import AdminAnnouncementsTab from '@/components/admin/AdminAnnouncementsTab.vue'
 import AdminProductsTab from '@/components/admin/AdminProductsTab.vue'
@@ -19,11 +18,8 @@ const { announcements } = useAnnouncementManager()
 // 產品管理 (只取 products 給 GitHub 同步用)
 const { products } = useProductManager()
 
-// 交貨照管理 (只取 deliveryPhotos 給 GitHub 同步用)
-const { deliveryPhotos } = useDeliveryPhotoManager()
-
 // GitHub 同步
-const { token, loadToken, saveToken, clearToken, syncAnnouncementsToGitHub, syncProductsToGitHub, syncDeliveryPhotosToGitHub } = useGitHubSync()
+const { token, loadToken, saveToken, clearToken, syncAnnouncementsToGitHub, syncProductsToGitHub } = useGitHubSync()
 const isTokenDialogOpen = ref(false)
 const tokenInput = ref('')
 const isSyncing = ref(false)
@@ -87,18 +83,7 @@ const handleSyncProducts = async () => {
     isSyncing.value = false
   }
 }
-  }
 
-  isSyncing.value = true
-  try {
-    await syncDeliveryPhotosToGitHub(deliveryPhotos.value)
-    alert('交貨照已同步到 GitHub！\n\n請等待 GitHub Actions 自動部署完成（約 1-2 分鐘）。')
-  } catch (error) {
-    alert('同步失敗：' + (error instanceof Error ? error.message : String(error)))
-  } finally {
-    isSyncing.value = false
-  }
-}
 // 頁籤管理
 const activeTab = ref<'announcements' | 'products' | 'deliveryPhotos'>('announcements')
 </script>
