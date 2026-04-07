@@ -62,7 +62,7 @@ useEventListener('keydown', (e) => {
       <div class="flex items-center justify-between h-16">
         <!-- Logo -->
         <div class="flex-shrink-0">
-          <RouterLink to="/" class="text-xl font-bold text-emerald-700">大倉代領股東紀念品</RouterLink>
+          <RouterLink to="/" class="text-xl font-bold text-emerald-700">大倉代領股東紀念品｜零股代領推薦｜全台最大全餐業者</RouterLink>
         </div>
 
         <!-- Desktop Navigation -->
