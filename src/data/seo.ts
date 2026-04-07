@@ -17,7 +17,7 @@ export const seoConfigs: Record<string, SEOConfig> = {
     title: '大倉代領股東紀念品｜零股代領推薦｜全台最大全餐業者',
     description: '只需一股即可領取，代購高機率發放股票，代領股東紀念品。870檔精選公司，一鍵買齊，省時省力。聯絡電話：0982-571-134',
     keywords: '股東紀念品,代領,股東禮品,一股,股票代購',
-    ogImage: 'https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=1200&h=630&q=80'
+    ogImage: 'https://sharegift.tw/images/line-share-v2.jpg'
   },
   services: {
     title: '服務介紹 | 大倉代領股東紀念品｜零股代領推薦｜全台最大全餐業者',

@@ -44,7 +44,7 @@ export function useSEO() {
       },
       {
         property: 'og:image',
-        content: seoConfig.value.ogImage || 'https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=1200&h=630&q=80'
+        content: seoConfig.value.ogImage || 'https://sharegift.tw/images/line-share-v2.jpg'
       },
       {
         property: 'og:type',
