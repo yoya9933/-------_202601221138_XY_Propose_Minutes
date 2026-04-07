@@ -59,22 +59,27 @@ useEventListener('keydown', (e) => {
 <template>
   <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
+      <div class="flex items-center justify-between h-16 gap-3">
         <!-- Logo -->
-        <div class="flex-shrink-0">
-          <RouterLink to="/" class="text-xl font-bold text-emerald-700">大倉代領股東紀念品｜零股代領推薦｜全台最大全餐業者</RouterLink>
+        <div class="flex-shrink min-w-0">
+          <RouterLink
+            to="/"
+            class="block font-bold text-emerald-700 leading-tight whitespace-nowrap truncate text-base xl:text-xl"
+          >
+            大倉代領股東紀念品｜零股代領推薦｜全台最大全餐業者
+          </RouterLink>
         </div>
 
         <!-- Desktop Navigation -->
-        <div class="hidden md:block">
-          <div class="flex items-center space-x-8">
+        <div class="hidden lg:block">
+          <div class="flex items-center gap-4 xl:gap-6">
             <RouterLink
               v-for="item in navItems"
               :key="item.name"
               :to="item.to"
               @mouseenter="prefetchRoute(item.to)"
               :class="[
-                'text-gray-700 hover:text-emerald-600 transition-colors font-medium relative',
+                'text-gray-700 hover:text-emerald-600 transition-colors font-medium relative whitespace-nowrap text-sm xl:text-base',
                 isActive(item.to) && 'text-emerald-600'
               ]"
             >
@@ -86,7 +91,7 @@ useEventListener('keydown', (e) => {
             </RouterLink>
             <RouterLink
               to="/admin"
-              class="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-white font-semibold shadow-sm hover:bg-emerald-700 transition-colors"
+              class="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-white font-semibold shadow-sm hover:bg-emerald-700 transition-colors whitespace-nowrap text-sm xl:text-base"
               @mouseenter="prefetchRoute('/admin')"
             >
               管理後台
@@ -94,7 +99,7 @@ useEventListener('keydown', (e) => {
             <a
               href="https://www.facebook.com/groups/call0982571134"
               target="_blank"
-              class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap text-sm xl:text-base"
             >
               FB 社團
             </a>
@@ -102,7 +107,7 @@ useEventListener('keydown', (e) => {
         </div>
 
         <!-- Mobile menu button -->
-        <div class="md:hidden">
+        <div class="lg:hidden">
           <Button
             @click="toggleMenu()"
             variant="ghost"
@@ -117,7 +122,7 @@ useEventListener('keydown', (e) => {
     </div>
 
     <!-- Mobile Navigation -->
-    <div v-if="isMenuOpen" class="md:hidden bg-white border-t">
+    <div v-if="isMenuOpen" class="lg:hidden bg-white border-t">
       <div class="px-4 py-2 space-y-1">
         <RouterLink
           v-for="item in navItems"
