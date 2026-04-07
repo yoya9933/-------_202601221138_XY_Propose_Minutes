@@ -100,7 +100,7 @@ const router = createRouter({
 
 // Update page title on navigation
 router.beforeEach((to, _from, next) => {
-  const baseTitle = '大倉代領股東紀念品'
+  const baseTitle = '大倉代領股東紀念品｜零股代領推薦｜全台最大全餐業者'
   document.title = to.meta.title 
     ? `${to.meta.title} - ${baseTitle}` 
     : baseTitle

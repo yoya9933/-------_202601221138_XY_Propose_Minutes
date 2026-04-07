@@ -4,7 +4,7 @@
       <div class="grid md:grid-cols-4 gap-8 mb-8">
         <!-- Brand -->
         <div>
-          <h3 class="text-2xl font-bold mb-4">大倉代領股東紀念品</h3>
+          <h3 class="text-2xl font-bold mb-4">大倉代領股東紀念品｜零股代領推薦｜全台最大全餐業者</h3>
           <p class="text-gray-400">
             專業的股東紀念品代領服務，讓您輕鬆享受股東權益
           </p>
@@ -88,7 +88,7 @@
       <!-- Copyright -->
       <div class="border-t border-gray-800 pt-8 text-center">
         <p class="text-gray-400 flex items-center justify-center gap-1">
-          © {{ new Date().getFullYear() }} 大倉代領股東紀念品.
+          © {{ new Date().getFullYear() }} 大倉代領股東紀念品｜零股代領推薦｜全台最大全餐業者.
         </p>
       </div>
     </div>
