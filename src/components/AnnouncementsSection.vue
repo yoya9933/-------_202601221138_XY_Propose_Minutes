@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { Megaphone, Loader2 } from 'lucide-vue-next'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { useSupabaseAnnouncementManager } from '@/composables/useSupabaseAnnouncementManager'
 import { computed, onMounted } from 'vue'
 import type { Announcement } from '@/lib/database.types'
@@ -39,6 +37,13 @@ const groupedAnnouncements = computed(() => {
 
 // 計算是否為空狀態
 const isEmpty = computed(() => announcements.value.length === 0)
+
+const announcementLines = (content: string) => {
+  return content
+    .split(/\n+/)
+    .map(line => line.trim())
+    .filter(Boolean)
+}
 </script>
 
 <template>
@@ -63,70 +68,61 @@ const isEmpty = computed(() => announcements.value.length === 0)
       <div v-else-if="isEmpty" class="text-center py-12 text-gray-500">
         目前沒有公告
       </div>
-      <!-- 優化渲染：按優先級分組顯示，重要公告優先 -->
-      <div v-else class="space-y-8">
+      <div v-else class="bg-white border border-gray-200 rounded-2xl p-6 md:p-8 space-y-8">
         <!-- 重要公告 -->
         <div v-if="groupedAnnouncements.important.length > 0">
           <h3 class="text-lg font-bold text-red-600 mb-4">🔴 重要公告</h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card v-for="item in groupedAnnouncements.important" :key="item.id" class="bg-red-50/50 border-red-200">
-              <CardHeader>
-                <div class="flex items-center justify-between">
-                  <CardTitle class="text-lg font-bold text-gray-900">{{ item.title }}</CardTitle>
-                  <span class="text-sm text-gray-500">{{ item.date }}</span>
-                </div>
-                <div class="mt-2 flex flex-wrap gap-2">
-                  <Badge v-for="tag in item.tags" :key="tag" variant="default">{{ tag }}</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p class="text-gray-700 leading-relaxed">{{ item.content }}</p>
-              </CardContent>
-            </Card>
-          </div>
+          <ul class="list-disc pl-5 space-y-6 text-gray-700">
+            <li v-for="item in groupedAnnouncements.important" :key="item.id" class="leading-relaxed">
+              <div class="font-semibold text-gray-900">{{ item.title }}</div>
+              <div class="mt-1 text-sm text-gray-500">{{ item.date }}</div>
+              <div v-if="item.tags?.length" class="mt-1 text-sm text-red-600">{{ item.tags.join(' / ') }}</div>
+              <ol class="mt-2 list-decimal space-y-1 pl-5 text-gray-700">
+                <li v-for="line in announcementLines(item.content)" :key="`${item.id}-${line}`">
+                  {{ line }}
+                </li>
+              </ol>
+            </li>
+          </ul>
         </div>
 
         <!-- 新消息 -->
         <div v-if="groupedAnnouncements.new.length > 0">
           <h3 class="text-lg font-bold text-blue-600 mb-4">🟢 新消息</h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card v-for="item in groupedAnnouncements.new" :key="item.id" class="bg-blue-50/50 border-blue-200">
-              <CardHeader>
-                <div class="flex items-center justify-between">
-                  <CardTitle class="text-lg font-bold text-gray-900">{{ item.title }}</CardTitle>
-                  <span class="text-sm text-gray-500">{{ item.date }}</span>
-                </div>
-                <div class="mt-2 flex flex-wrap gap-2">
-                  <Badge v-for="tag in item.tags" :key="tag" variant="default">{{ tag }}</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p class="text-gray-700 leading-relaxed">{{ item.content }}</p>
-              </CardContent>
-            </Card>
-          </div>
+          <ul class="list-disc pl-5 space-y-6 text-gray-700">
+            <li v-for="item in groupedAnnouncements.new" :key="item.id" class="leading-relaxed">
+              <div class="font-semibold text-gray-900">{{ item.title }}</div>
+              <div class="mt-1 text-sm text-gray-500">{{ item.date }}</div>
+              <div v-if="item.tags?.length" class="mt-1 text-sm text-blue-600">{{ item.tags.join(' / ') }}</div>
+              <ol class="mt-2 list-decimal space-y-1 pl-5 text-gray-700">
+                <li v-for="line in announcementLines(item.content)" :key="`${item.id}-${line}`">
+                  {{ line }}
+                </li>
+              </ol>
+            </li>
+          </ul>
         </div>
 
         <!-- 一般資訊 -->
         <div v-if="groupedAnnouncements.info.length > 0">
           <h3 class="text-lg font-bold text-gray-600 mb-4">ℹ️ 一般資訊</h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card v-for="item in groupedAnnouncements.info" :key="item.id" class="bg-white/80">
-              <CardHeader>
-                <div class="flex items-center justify-between">
-                  <CardTitle class="text-lg font-bold text-gray-900">{{ item.title }}</CardTitle>
-                  <span class="text-sm text-gray-500">{{ item.date }}</span>
-                </div>
-                <div class="mt-2 flex flex-wrap gap-2">
-                  <Badge v-for="tag in item.tags" :key="tag" variant="default">{{ tag }}</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p class="text-gray-700 leading-relaxed">{{ item.content }}</p>
-              </CardContent>
-            </Card>
-          </div>
+          <ul class="list-disc pl-5 space-y-6 text-gray-700">
+            <li v-for="item in groupedAnnouncements.info" :key="item.id" class="leading-relaxed">
+              <div class="font-semibold text-gray-900">{{ item.title }}</div>
+              <div class="mt-1 text-sm text-gray-500">{{ item.date }}</div>
+              <div v-if="item.tags?.length" class="mt-1 text-sm text-gray-600">{{ item.tags.join(' / ') }}</div>
+              <ol class="mt-2 list-decimal space-y-1 pl-5 text-gray-700">
+                <li v-for="line in announcementLines(item.content)" :key="`${item.id}-${line}`">
+                  {{ line }}
+                </li>
+              </ol>
+            </li>
+          </ul>
         </div>
+
+        <p class="text-sm text-gray-600">
+          如需公告相關協助，請聯絡 LINE：<span class="font-semibold">@792nvftc</span> 或電話 <span class="font-semibold">0982-571-134</span>
+        </p>
       </div>
     </div>
   </section>

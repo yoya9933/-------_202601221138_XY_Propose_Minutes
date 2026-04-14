@@ -17,7 +17,7 @@ export const announcements: Announcement[] = [
     "tags": [
       "重要"
     ],
-    "content": "加line: @792nvftc 留下 姓名 聯繫方式 與所提供的電投圖是那些 核對該公司的電投領取規則 以免不符規則 或是已超過印單時間 來不及"
+    "content": "1. 加 LINE：@792nvftc\n2. 留下姓名與聯繫方式\n3. 提供電投圖並確認對應公司\n4. 核對該公司的電投領取規則，避免不符規則或超過印單時間"
   },
   {
     "id": 1,
@@ -28,7 +28,7 @@ export const announcements: Announcement[] = [
       "服務",
       "時程"
     ],
-    "content": "春節期間照常收單,若要提供證件或是使用模組,請提前預約安排。聯絡電話：0982-571-134（贊哥）。"
+    "content": "1. 春節期間照常收單\n2. 若要提供證件或使用模組，請提前預約安排\n3. 聯絡電話：0982-571-134（贊哥）"
   },
   {
     "id": 2,
@@ -39,7 +39,7 @@ export const announcements: Announcement[] = [
       "費率",
       "方案"
     ],
-    "content": "全餐代領期間 無法處理散單寄運"
+    "content": "1. 全餐代領期間無法處理散單寄運\n2. 散單請配合全餐行程安排"
   },
   {
     "id": 3,
@@ -50,6 +50,6 @@ export const announcements: Announcement[] = [
       "文件",
       "上傳"
     ],
-    "content": "建議以 JPG/PNG 單檔 5MB 內，可於「文件上傳」頁使用表單，若失敗請改用 LINE：@792nvftc。"
+    "content": "1. 建議以 JPG/PNG 格式上傳\n2. 單檔大小請控制在 5MB 內\n3. 可於「文件上傳」頁使用表單\n4. 若失敗請改用 LINE：@792nvftc"
   }
 ]
