@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Megaphone, Loader2 } from 'lucide-vue-next'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { useSupabaseAnnouncementManager } from '@/composables/useSupabaseAnnouncementManager'
 import { computed, onMounted } from 'vue'
@@ -65,67 +64,67 @@ const isEmpty = computed(() => announcements.value.length === 0)
       </div>
       <!-- 優化渲染：按優先級分組顯示，重要公告優先 -->
       <div v-else class="space-y-8">
-        <!-- 重要公告 -->
+        <!-- 重要公告（條列式） -->
         <div v-if="groupedAnnouncements.important.length > 0">
           <h3 class="text-lg font-bold text-red-600 mb-4">🔴 重要公告</h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card v-for="item in groupedAnnouncements.important" :key="item.id" class="bg-red-50/50 border-red-200">
-              <CardHeader>
-                <div class="flex items-center justify-between">
-                  <CardTitle class="text-lg font-bold text-gray-900">{{ item.title }}</CardTitle>
-                  <span class="text-sm text-gray-500">{{ item.date }}</span>
+          <ul class="space-y-4">
+            <li v-for="item in groupedAnnouncements.important" :key="item.id" class="bg-red-50/60 border border-red-100 rounded-lg p-4">
+              <div class="flex items-start justify-between gap-4">
+                <div class="flex-1">
+                  <div class="flex items-center justify-between">
+                    <h4 class="text-lg font-semibold text-gray-900">{{ item.title }}</h4>
+                    <time class="text-sm text-gray-500">{{ item.date }}</time>
+                  </div>
+                  <p class="mt-2 text-gray-700 leading-relaxed">{{ item.content }}</p>
+                  <div class="mt-3 flex flex-wrap gap-2">
+                    <Badge v-for="tag in item.tags" :key="tag" variant="default">{{ tag }}</Badge>
+                  </div>
                 </div>
-                <div class="mt-2 flex flex-wrap gap-2">
-                  <Badge v-for="tag in item.tags" :key="tag" variant="default">{{ tag }}</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p class="text-gray-700 leading-relaxed">{{ item.content }}</p>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </li>
+          </ul>
         </div>
 
-        <!-- 新消息 -->
+        <!-- 新消息（條列式） -->
         <div v-if="groupedAnnouncements.new.length > 0">
           <h3 class="text-lg font-bold text-blue-600 mb-4">🟢 新消息</h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card v-for="item in groupedAnnouncements.new" :key="item.id" class="bg-blue-50/50 border-blue-200">
-              <CardHeader>
-                <div class="flex items-center justify-between">
-                  <CardTitle class="text-lg font-bold text-gray-900">{{ item.title }}</CardTitle>
-                  <span class="text-sm text-gray-500">{{ item.date }}</span>
+          <ul class="space-y-3">
+            <li v-for="item in groupedAnnouncements.new" :key="item.id" class="bg-blue-50/60 border border-blue-100 rounded-lg p-3">
+              <div class="flex items-start justify-between">
+                <div class="flex-1">
+                  <div class="flex items-center justify-between">
+                    <h4 class="text-md font-medium text-gray-900">{{ item.title }}</h4>
+                    <time class="text-sm text-gray-500">{{ item.date }}</time>
+                  </div>
+                  <p class="mt-1 text-gray-700">{{ item.content }}</p>
+                  <div class="mt-2 flex flex-wrap gap-2">
+                    <Badge v-for="tag in item.tags" :key="tag" variant="default">{{ tag }}</Badge>
+                  </div>
                 </div>
-                <div class="mt-2 flex flex-wrap gap-2">
-                  <Badge v-for="tag in item.tags" :key="tag" variant="default">{{ tag }}</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p class="text-gray-700 leading-relaxed">{{ item.content }}</p>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </li>
+          </ul>
         </div>
 
-        <!-- 一般資訊 -->
+        <!-- 一般資訊（條列式） -->
         <div v-if="groupedAnnouncements.info.length > 0">
           <h3 class="text-lg font-bold text-gray-600 mb-4">ℹ️ 一般資訊</h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card v-for="item in groupedAnnouncements.info" :key="item.id" class="bg-white/80">
-              <CardHeader>
-                <div class="flex items-center justify-between">
-                  <CardTitle class="text-lg font-bold text-gray-900">{{ item.title }}</CardTitle>
-                  <span class="text-sm text-gray-500">{{ item.date }}</span>
+          <ul class="space-y-3">
+            <li v-for="item in groupedAnnouncements.info" :key="item.id" class="bg-white/80 border rounded-lg p-3">
+              <div class="flex items-start justify-between">
+                <div class="flex-1">
+                  <div class="flex items-center justify-between">
+                    <h4 class="text-md font-medium text-gray-900">{{ item.title }}</h4>
+                    <time class="text-sm text-gray-500">{{ item.date }}</time>
+                  </div>
+                  <p class="mt-1 text-gray-700">{{ item.content }}</p>
+                  <div class="mt-2 flex flex-wrap gap-2">
+                    <Badge v-for="tag in item.tags" :key="tag" variant="default">{{ tag }}</Badge>
+                  </div>
                 </div>
-                <div class="mt-2 flex flex-wrap gap-2">
-                  <Badge v-for="tag in item.tags" :key="tag" variant="default">{{ tag }}</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p class="text-gray-700 leading-relaxed">{{ item.content }}</p>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
