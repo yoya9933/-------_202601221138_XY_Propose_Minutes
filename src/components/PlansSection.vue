@@ -33,6 +33,19 @@ const plans = [
     highlight: '租屋族首選',
     popular: false,
   },
+  {
+    name: '全餐方案三',
+    subtitle: '懶人全包配置',
+    description: '模組內股東紀念品全領，全取不挑物',
+    features: [
+      '模組內股東紀念品全領，全取不挑物',
+      '需綁定大倉物流，送貨到府',
+      '代領費 10 元',
+      '物流費 5 元 計費',
+    ],
+    highlight: '想省心就選這個',
+    popular: false,
+  },
 ]
 
 const traditionalPricing = [
@@ -55,7 +68,7 @@ const traditionalPricing = [
       </div>
 
       <!-- Main plans -->
-      <div class="grid md:grid-cols-2 gap-8 mb-16">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
         <Card
           v-for="plan in plans"
           :key="plan.name"
