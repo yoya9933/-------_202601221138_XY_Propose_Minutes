@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎁</text></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="theme-color" content="#059669" />
+    
+    <!-- 資源預加載優化 -->
+    <!-- DNS 預解析 - 加速外部資源 -->
+    <link rel="dns-prefetch" href="https://images.unsplash.com" />
+    <link rel="dns-prefetch" href="https://custom-images.strikinglycdn.com" />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    
+    <!-- 預連接 - 建立 TCP/TLS 連線（支援 WebP/AVIF 格式協商） -->
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+    <link rel="preconnect" href="https://custom-images.strikinglycdn.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- 預載入關鍵中文字體（700 weight，最常用子集） -->
+    <!-- 優先載入最常用的字形以減少 FCP/LCP 延遲 -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://fonts.gstatic.com/s/notosanstc/v39/-nF7OG829Oofr2wohFbTp9iFOkMQAewlpbGXhhyYs0QF3kPVyLylzU95vTq1Ltj5xQez1g.119.woff2" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://fonts.gstatic.com/s/notosanstc/v39/-nF7OG829Oofr2wohFbTp9iFOkMQAewlpbGXhhyYs0QF3kPVyLylzU95vTq1Ltj5xQez1g.118.woff2" />
+    
+    <!-- Google Fonts Noto Sans TC（僅在系統無該字體時載入）-->
+    <!-- font-display: swap 避免 FOIT (Flash of Invisible Text) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    
+    <!-- 預加載關鍵英雄圖片（響應式） -->
+    <!-- 預加載最常見的尺寸以加快 LCP -->
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=1280&q=80" media="(max-width: 768px)" />
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=1920&q=80" media="(min-width: 769px)" />
+    
+    <!-- 預加載主要 JavaScript 和 CSS（Vite 會自動注入，這裡作為備份） -->
+    <link rel="preload" as="script" href="data:video/mp2t;base64,aW1wb3J0IHsgY3JlYXRlQXBwIH0gZnJvbSAndnVlJwppbXBvcnQgJy4vc3R5bGUuY3NzJwppbXBvcnQgQXBwIGZyb20gJy4vQXBwLnZ1ZScKaW1wb3J0IHJvdXRlciBmcm9tICcuL3JvdXRlcicKaW1wb3J0IHsgaXNTdXBhYmFzZUNvbmZpZ3VyZWQgfSBmcm9tICdAL2xpYi9zdXBhYmFzZScKCi8vIOebuOWuueiIiumAo+e1kO+8muWwh+mdniBoYXNoIOi3r+W+keWwjuWQkSBoYXNoIOi3r+eUsQovLyDkvovlpoLvvJpodHRwczovL3NoYXJlZ2lmdC50dy9hZG1pbiAtPiBodHRwczovL3NoYXJlZ2lmdC50dy8jL2FkbWluCmlmICghd2luZG93LmxvY2F0aW9uLmhhc2ggJiYgd2luZG93LmxvY2F0aW9uLnBhdGhuYW1lICE9PSAnLycpIHsKICBjb25zdCByZWRpcmVjdFVybCA9IGAke3dpbmRvdy5sb2NhdGlvbi5vcmlnaW59LyMke3dpbmRvdy5sb2NhdGlvbi5wYXRobmFtZX0ke3dpbmRvdy5sb2NhdGlvbi5zZWFyY2h9YAogIHdpbmRvdy5sb2NhdGlvbi5yZXBsYWNlKHJlZGlyZWN0VXJsKQp9Cgpjb25zdCBhcHAgPSBjcmVhdGVBcHAoQXBwKQoKLy8g6ZaL55m855Kw5aKD6Kq/6Kmm5L+h5oGvCmlmIChpbXBvcnQubWV0YS5lbnYuREVWKSB7CiAgY29uc29sZS5sb2coJ/CfmoAg5oeJ55So5ZWf5YuV5LitLi4uJykKICBjb25zb2xlLmxvZygn8J+TiyDnkrDlooPorormlbg6JykKICBjb25zb2xlLmxvZygnICAtIFZJVEVfU1VQQUJBU0VfVVJMOicsIGltcG9ydC5tZXRhLmVudi5WSVRFX1NVUEFCQVNFX1VSTCA/ICfinIUg5bey6YWN572uJyA6ICfinYwg5pyq6YWN572uJykKICBjb25zb2xlLmxvZygnICAtIFZJVEVfU1VQQUJBU0VfQU5PTl9LRVk6JywgaW1wb3J0Lm1ldGEuZW52LlZJVEVfU1VQQUJBU0VfQU5PTl9LRVkgPyAn4pyFIOW3sumFjee9ricgOiAn4p2MIOacqumFjee9ricpCiAgY29uc29sZS5sb2coJyAgLSBTdXBhYmFzZSDpgKPmjqXni4DmhYs6JywgaXNTdXBhYmFzZUNvbmZpZ3VyZWQoKSA/ICfinIUg5bey6YCj5o6lJyA6ICfinYwg5pyq6YCj5o6lJykKfQoKYXBwLnVzZShyb3V0ZXIpCmFwcC5tb3VudCgnI2FwcCcpCg==" />
+    
+    <!-- 基礎 SEO Meta 標籤 -->
+    <meta name="description" content="只需一股即可領取，代購高機率發放股票，代領股東紀念品。870檔精選公司，一鍵買齊，省時省力。聯絡電話：0982-571-134" />
+    <meta name="keywords" content="股東紀念品,代領,股東禮品,一股,股票代購,股東會,免費送貨" />
+    <meta name="author" content="大倉代領股東紀念品" />
+    
+    <!-- Open Graph (社群分享) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="大倉代領股東紀念品｜零股代領推薦｜全台最大全餐業者" />
+    <meta property="og:description" content="只需一股即可領取，代購高機率發放股票，代領股東紀念品。870檔精選公司，一鍵買齊，省時省力。" />
+    <meta property="og:image" content="https://sharegift.tw/images/line-share-v2.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/jpeg" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="大倉代領股東紀念品｜零股代領推薦｜全台最大全餐業者" />
+    <meta name="twitter:description" content="只需一股即可領取，代購高機率發放股票，代領股東紀念品。870檔精選公司。" />
+    
+    <title>大倉代領股東紀念品｜零股代領推薦｜全台最大全餐業者</title>
+    <script type="module" crossorigin src="./assets/index-CJfxGKWv.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/vue-ecosystem-CVFXUm4o.js">
+    <link rel="modulepreload" crossorigin href="./assets/vue-router-IrslfC-1.js">
+    <link rel="modulepreload" crossorigin href="./assets/vendor-Dpdlp087.js">
+    <link rel="modulepreload" crossorigin href="./assets/reka-ui-0tp7vVnU.js">
+    <link rel="modulepreload" crossorigin href="./assets/tailwind-utils-BsYA_xMH.js">
+    <link rel="modulepreload" crossorigin href="./assets/vue-core--UKDfGiP.js">
+    <link rel="stylesheet" crossorigin href="./assets/index-ljSSlNTa.css">
+  </head>
+  <body>
+    <div id="app"></div>
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"9268dd985f4842a987c230b1b629fee3","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
