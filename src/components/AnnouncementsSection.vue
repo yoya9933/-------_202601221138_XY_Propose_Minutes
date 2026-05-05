@@ -39,11 +39,31 @@ const groupedAnnouncements = computed(() => {
 // 計算是否為空狀態
 const isEmpty = computed(() => announcements.value.length === 0)
 
-const splitContent = (content: string) => {
-  return content
-    .split(/\r?\n/)
-    .map(line => line.trim())
-    .filter(Boolean)
+const formatContentLines = (content: string) => {
+  const normalized = content.trim()
+
+  if (normalized.includes('\n')) {
+    return normalized
+      .split(/\r?\n/)
+      .map(line => line.trim())
+      .filter(Boolean)
+  }
+
+  if (/\d{4}\s/.test(normalized)) {
+    return normalized
+      .split(/(?=\d{4}\s)/)
+      .map(line => line.trim())
+      .filter(Boolean)
+  }
+
+  if (/\d{4}年/.test(normalized)) {
+    return normalized
+      .split(/\s+(?=\d{4}年)/)
+      .map(line => line.trim())
+      .filter(Boolean)
+  }
+
+  return [normalized]
 }
 </script>
 
@@ -83,7 +103,7 @@ const splitContent = (content: string) => {
                     <time class="text-sm text-gray-500">{{ item.date }}</time>
                   </div>
                   <ul class="mt-2 list-disc pl-5 space-y-1 text-gray-700">
-                    <li v-for="(line, index) in splitContent(item.content)" :key="`${item.id}-important-${index}`">
+                    <li v-for="(line, index) in formatContentLines(item.content)" :key="`${item.id}-important-${index}`">
                       {{ line }}
                     </li>
                   </ul>
@@ -108,7 +128,7 @@ const splitContent = (content: string) => {
                     <time class="text-sm text-gray-500">{{ item.date }}</time>
                   </div>
                   <ul class="mt-1 list-disc pl-5 space-y-1 text-gray-700">
-                    <li v-for="(line, index) in splitContent(item.content)" :key="`${item.id}-new-${index}`">
+                    <li v-for="(line, index) in formatContentLines(item.content)" :key="`${item.id}-new-${index}`">
                       {{ line }}
                     </li>
                   </ul>
@@ -133,7 +153,7 @@ const splitContent = (content: string) => {
                     <time class="text-sm text-gray-500">{{ item.date }}</time>
                   </div>
                   <ul class="mt-1 list-disc pl-5 space-y-1 text-gray-700">
-                    <li v-for="(line, index) in splitContent(item.content)" :key="`${item.id}-info-${index}`">
+                    <li v-for="(line, index) in formatContentLines(item.content)" :key="`${item.id}-info-${index}`">
                       {{ line }}
                     </li>
                   </ul>
