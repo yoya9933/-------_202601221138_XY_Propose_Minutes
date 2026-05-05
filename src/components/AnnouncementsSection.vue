@@ -38,6 +38,13 @@ const groupedAnnouncements = computed(() => {
 
 // 計算是否為空狀態
 const isEmpty = computed(() => announcements.value.length === 0)
+
+const splitContent = (content: string) => {
+  return content
+    .split(/\r?\n/)
+    .map(line => line.trim())
+    .filter(Boolean)
+}
 </script>
 
 <template>
@@ -75,7 +82,11 @@ const isEmpty = computed(() => announcements.value.length === 0)
                     <h4 class="text-lg font-semibold text-gray-900">{{ item.title }}</h4>
                     <time class="text-sm text-gray-500">{{ item.date }}</time>
                   </div>
-                  <p class="mt-2 text-gray-700 leading-relaxed">{{ item.content }}</p>
+                  <ul class="mt-2 list-disc pl-5 space-y-1 text-gray-700">
+                    <li v-for="(line, index) in splitContent(item.content)" :key="`${item.id}-important-${index}`">
+                      {{ line }}
+                    </li>
+                  </ul>
                   <div class="mt-3 flex flex-wrap gap-2">
                     <Badge v-for="tag in item.tags" :key="tag" variant="default">{{ tag }}</Badge>
                   </div>
@@ -96,7 +107,11 @@ const isEmpty = computed(() => announcements.value.length === 0)
                     <h4 class="text-md font-medium text-gray-900">{{ item.title }}</h4>
                     <time class="text-sm text-gray-500">{{ item.date }}</time>
                   </div>
-                  <p class="mt-1 text-gray-700">{{ item.content }}</p>
+                  <ul class="mt-1 list-disc pl-5 space-y-1 text-gray-700">
+                    <li v-for="(line, index) in splitContent(item.content)" :key="`${item.id}-new-${index}`">
+                      {{ line }}
+                    </li>
+                  </ul>
                   <div class="mt-2 flex flex-wrap gap-2">
                     <Badge v-for="tag in item.tags" :key="tag" variant="default">{{ tag }}</Badge>
                   </div>
@@ -117,7 +132,11 @@ const isEmpty = computed(() => announcements.value.length === 0)
                     <h4 class="text-md font-medium text-gray-900">{{ item.title }}</h4>
                     <time class="text-sm text-gray-500">{{ item.date }}</time>
                   </div>
-                  <p class="mt-1 text-gray-700">{{ item.content }}</p>
+                  <ul class="mt-1 list-disc pl-5 space-y-1 text-gray-700">
+                    <li v-for="(line, index) in splitContent(item.content)" :key="`${item.id}-info-${index}`">
+                      {{ line }}
+                    </li>
+                  </ul>
                   <div class="mt-2 flex flex-wrap gap-2">
                     <Badge v-for="tag in item.tags" :key="tag" variant="default">{{ tag }}</Badge>
                   </div>
