@@ -32,8 +32,10 @@
     <!-- font-display: swap 避免 FOIT (Flash of Invisible Text) -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     
-    <!-- 預加載首頁品牌圖片 -->
-    <link rel="preload" as="image" href="/images/dacang-logo-20261016.jpg" />
+    <!-- 預加載關鍵英雄圖片（響應式） -->
+    <!-- 預加載最常見的尺寸以加快 LCP -->
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=1280&q=80" media="(max-width: 768px)" />
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=1920&q=80" media="(min-width: 769px)" />
     
     <!-- 預加載主要 JavaScript 和 CSS（Vite 會自動注入，這裡作為備份） -->
     <link rel="preload" as="script" href="/src/main.ts" />
@@ -60,6 +62,24 @@
     <meta name="twitter:title" content="大倉代領股東紀念品｜零股代領推薦｜全台最大全餐業者" />
     <meta name="twitter:description" content="只需一股即可領取，代購高機率發放股票，代領股東紀念品。870檔精選公司。" />
     
+    <!-- 在原始 HTML 指定搜尋結果偏好的代表圖片，供爬蟲直接讀取 -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": "https://sharegift.tw/#webpage",
+        "url": "https://sharegift.tw/",
+        "name": "大倉代領股東紀念品｜零股代領推薦｜全台最大全餐業者",
+        "primaryImageOfPage": {
+          "@type": "ImageObject",
+          "url": "https://sharegift.tw/images/dacang-logo-20261016.jpg",
+          "contentUrl": "https://sharegift.tw/images/dacang-logo-20261016.jpg",
+          "width": 382,
+          "height": 324,
+          "caption": "大倉代領，一股全餐，一鍵買齊"
+        }
+      }
+    </script>
     <title>大倉代領股東紀念品｜零股代領推薦｜全台最大全餐業者</title>
   </head>
   <body>

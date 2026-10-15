@@ -1,10 +1,19 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { Phone, MessageCircle, Gift, CheckCircle } from 'lucide-vue-next'
+import { useResponsiveImage } from '@/composables/useResponsiveImage'
 import { preloadImage } from '@/composables/useResourcePreload'
 
 const imageLoaded = ref(false)
 
+// 使用響應式圖片降低首屏 LCP
+const heroImage = useResponsiveImage({
+  baseUrl: 'https://images.unsplash.com/photo-1553729459-efe14ef6055d',
+  widths: [640, 960, 1280, 1600, 1920],
+  alt: '背景圖',
+  sizes: '(max-width: 768px) 100vw, 1200px',
+  formats: 'auto'
+})
 
 // 預加載但僅在空閒時觸發，避免阻塞首屏
 onMounted(() => {
@@ -28,21 +37,34 @@ onMounted(() => {
   <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-28">
     <!-- Background -->
     <div class="absolute inset-0 bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-700"></div>
-    <!-- 保留完整品牌標誌，避免裁切文字 -->
-    <img
-      src="/images/dacang-logo-20261016.jpg"
-      alt="大倉代領標誌，一股全餐，一鍵買齊"
-      width="382"
-      height="324"
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
-      @load="imageLoaded = true"
-      :class="[
-        'absolute inset-0 w-full h-full object-contain transition-opacity duration-500',
-        imageLoaded ? 'opacity-10' : 'opacity-0'
-      ]"
-    />
+    <!-- Background image with picture element for format optimization -->
+    <picture>
+      <!-- AVIF format (最優) -->
+      <source 
+        :srcset="heroImage.pictureSources.value[0]?.srcSet"
+        :type="heroImage.pictureSources.value[0]?.type"
+      />
+      <!-- WebP format (備選) -->
+      <source 
+        :srcset="heroImage.pictureSources.value[1]?.srcSet"
+        :type="heroImage.pictureSources.value[1]?.type"
+      />
+      <!-- Fallback JPEG -->
+      <img 
+        :src="heroImage.src.value"
+        :srcset="heroImage.srcSet.value"
+        :sizes="heroImage.sizes"
+        alt="背景圖"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        @load="imageLoaded = true"
+        :class="[
+          'absolute inset-0 w-full h-full object-cover opacity-10 transition-opacity duration-500',
+          imageLoaded ? 'opacity-10' : 'opacity-0'
+        ]"
+      />
+    </picture>
     <!-- Blur placeholder (visible until image loads) -->
     <div 
       :class="[

@@ -92,8 +92,8 @@ function generateOrganizationSchema() {
     logo: {
       '@type': 'ImageObject',
       url: organizationInfo.logo,
-      width: 512,
-      height: 512,
+      width: 382,
+      height: 324,
     },
     image: organizationInfo.image,
     telephone: organizationInfo.telephone,
