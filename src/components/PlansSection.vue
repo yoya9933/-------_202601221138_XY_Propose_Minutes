@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Check, Star, ArrowRight } from 'lucide-vue-next'
+import { Check, Star, ArrowRight, Truck } from 'lucide-vue-next'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -8,6 +8,7 @@ const plans = [
   {
     name: '全餐方案一',
     subtitle: '物品分配',
+    deliveryBenefit: '全台免費送貨到府',
     description: '每年以實際領到公司數量均分，不收任何費用',
     features: [
       '客戶可自選當年度熱門物品會幫入箱',
@@ -94,6 +95,17 @@ const traditionalPricing = [
           </CardHeader>
 
           <CardContent>
+            <div
+              v-if="plan.deliveryBenefit"
+              class="mb-6 flex items-center gap-3 rounded-xl bg-emerald-700 px-4 py-4 text-white"
+            >
+              <Truck class="h-8 w-8 flex-shrink-0" aria-hidden="true" />
+              <div>
+                <p class="text-2xl font-extrabold leading-snug">{{ plan.deliveryBenefit }}</p>
+                <p class="mt-1 text-sm text-emerald-50">全台配送，運費 0 元</p>
+              </div>
+            </div>
+
             <p class="text-gray-600 text-center mb-6">{{ plan.description }}</p>
 
             <div class="space-y-3 mb-8">
@@ -103,7 +115,9 @@ const traditionalPricing = [
                 class="flex items-start gap-3"
               >
                 <Check class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                <span class="text-gray-700">{{ feature }}</span>
+                <span
+                  :class="feature === plan.deliveryBenefit ? 'text-lg font-bold text-emerald-800' : 'text-gray-700'"
+                >{{ feature }}</span>
               </div>
             </div>
 
