@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Check, Star, ArrowRight, Truck } from 'lucide-vue-next'
+import { Check, Star, ArrowRight, Truck, CreditCard } from 'lucide-vue-next'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -23,6 +23,7 @@ const plans = [
   {
     name: '全餐方案二',
     subtitle: '超商卡分配',
+    cardBenefit: '總金額年年破萬',
     description: '年輕人在外租屋，無法領取大量生活用品者',
     features: [
       '採審核機制通過者適用',
@@ -103,6 +104,17 @@ const traditionalPricing = [
               <div>
                 <p class="text-2xl font-extrabold leading-snug">{{ plan.deliveryBenefit }}</p>
                 <p class="mt-1 text-sm text-emerald-50">全台配送，運費 0 元</p>
+              </div>
+            </div>
+
+            <div
+              v-if="plan.cardBenefit"
+              class="mb-6 flex items-center gap-3 rounded-xl bg-amber-100 px-4 py-4 text-amber-950 ring-1 ring-inset ring-amber-300"
+            >
+              <CreditCard class="h-8 w-8 flex-shrink-0 text-amber-800" aria-hidden="true" />
+              <div>
+                <p class="text-2xl font-extrabold leading-snug">{{ plan.cardBenefit }}</p>
+                <p class="mt-1 text-sm text-amber-900">7-11・全家超商卡</p>
               </div>
             </div>
 
