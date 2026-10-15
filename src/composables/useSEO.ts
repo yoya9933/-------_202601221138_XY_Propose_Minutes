@@ -44,7 +44,7 @@ export function useSEO() {
       },
       {
         property: 'og:image',
-        content: seoConfig.value.ogImage || 'https://sharegift.tw/images/line-share-v2.jpg'
+        content: seoConfig.value.ogImage || 'https://sharegift.tw/images/dacang-logo-20261016.jpg'
       },
       {
         property: 'og:type',
@@ -55,6 +55,10 @@ export function useSEO() {
         content: `${baseURL}${route.path}`
       },
       // Twitter Card
+      {
+        name: 'twitter:image',
+        content: seoConfig.value.ogImage || 'https://sharegift.tw/images/dacang-logo-20261016.jpg'
+      },
       {
         name: 'twitter:card',
         content: 'summary_large_image'

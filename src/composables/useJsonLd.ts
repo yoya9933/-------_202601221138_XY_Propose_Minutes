@@ -29,8 +29,8 @@ const organizationInfo = {
   description: '專業股東紀念品代領服務，只需一股即可領取，代購高機率發放股票，870檔精選公司，一鍵買齊，省時省力。',
   telephone: '0982-571-134',
   email: 'playegg903@gmail.com',
-  logo: 'https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=512&h=512&q=80',
-  image: 'https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=1200&h=630&q=80',
+  logo: 'https://sharegift.tw/images/dacang-logo-20261016.jpg',
+  image: 'https://sharegift.tw/images/dacang-logo-20261016.jpg',
   priceRange: 'NT$10-NT$30',
   // 社群連結
   sameAs: [
