@@ -32,10 +32,8 @@
     <!-- font-display: swap 避免 FOIT (Flash of Invisible Text) -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     
-    <!-- 預加載關鍵英雄圖片（響應式） -->
-    <!-- 預加載最常見的尺寸以加快 LCP -->
-    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=1280&q=80" media="(max-width: 768px)" />
-    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=1920&q=80" media="(min-width: 769px)" />
+    <!-- 預加載首頁品牌圖片 -->
+    <link rel="preload" as="image" href="/images/dacang-logo-20261016.jpg" />
     
     <!-- 預加載主要 JavaScript 和 CSS（Vite 會自動注入，這裡作為備份） -->
     <link rel="preload" as="script" href="/src/main.ts" />
