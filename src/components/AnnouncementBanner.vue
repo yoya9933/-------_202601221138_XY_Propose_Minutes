@@ -18,7 +18,7 @@ const latestAnnouncements = computed(() => announcements.value.slice(0, 2))
 </script>
 
 <template>
-  <section class="fixed top-16 left-0 right-0 z-40 py-3 bg-gradient-to-r from-amber-50 to-orange-50 shadow-sm">
+  <section id="announcement-banner" class="fixed top-16 left-0 right-0 z-40 py-3 bg-gradient-to-r from-amber-50 to-orange-50 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center gap-4">
         <!-- Icon and title -->

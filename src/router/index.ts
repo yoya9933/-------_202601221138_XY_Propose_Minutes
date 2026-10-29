@@ -92,7 +92,9 @@ const router = createRouter({
       return savedPosition
     }
     if (to.hash) {
-      return { el: to.hash, behavior: 'smooth' }
+      const target = document.getElementById(to.hash.slice(1))
+      const top = target ? parseFloat(getComputedStyle(target).scrollMarginTop) || 0 : 0
+      return { el: to.hash, top, behavior: 'smooth' }
     }
     return { top: 0, behavior: 'smooth' }
   }
